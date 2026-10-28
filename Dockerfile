@@ -1,12 +1,17 @@
 FROM serversideup/php:8.4-fpm-nginx
 
-# Копируем файлы проекта
+# Copy the application
 COPY . /var/www/html
 
-# Копируем скрипт запуска с правами на выполнение
+# Copy the deployment script with executable permissions
 COPY --chmod=755 scripts/00-laravel-deploy.sh /etc/entrypoint.d/00-laravel-deploy.sh
 
-# Настраиваем права для Laravel
+# Configure application permissions
 USER root
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+
+RUN chown -R www-data:www-data /var/www/html 
+    && chmod -R u+rwX /var/www/html/storage 
+    && chmod -R u+rwX /var/www/html/bootstrap/cache 
+    && chmod -R u+rwX /var/www/html/database
+
 USER www-data
