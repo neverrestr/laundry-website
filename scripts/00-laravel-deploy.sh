@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 echo "1. Setting up .env file"
 cp .env.example .env
 sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=sqlite/g' .env
@@ -10,9 +11,10 @@ echo "3. Creating SQLite database and setting permissions"
 mkdir -p /var/www/html/database
 touch /var/www/html/database/database.sqlite
 chmod 777 /var/www/html/database/database.sqlite
+chmod -R 777 /var/www/html/database
 
-echo "4. Installing Composer dependencies"
-composer install --no-dev --working-dir=/var/www/html
+echo "4. Installing Composer dependencies (ignoring platform reqs)"
+composer install --no-dev --ignore-platform-reqs --working-dir=/var/www/html
 
 echo "5. Running migrations"
 php artisan migrate --force
@@ -24,3 +26,4 @@ php artisan route:cache
 echo "7. Final permissions"
 chmod -R 775 /var/www/html/storage
 chmod -R 775 /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/public
