@@ -10,11 +10,10 @@ sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=sqlite/g' .env
 echo "3. Generating app key"
 php artisan key:generate --force
 
-echo "4. Creating SQLite database and setting permissions"
+echo "4. Creating SQLite database"
 mkdir -p /var/www/html/database
 touch /var/www/html/database/database.sqlite
 chmod 777 /var/www/html/database/database.sqlite
-chmod -R 777 /var/www/html/database
 
 echo "5. Running migrations"
 php artisan migrate --force
