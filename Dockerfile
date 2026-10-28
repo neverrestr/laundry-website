@@ -1,10 +1,13 @@
-FROM richarvey/nginx-php-fpm:php8.4
-COPY . .
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV APP_ENV production
-ENV APP_DEBUG false
-CMD ["/start.sh"]
+FROM serversideup/php:8.4-fpm-nginx
+
+# Копируем файлы проекта
+COPY . /var/www/html
+
+# Копируем наш скрипт запуска в специальную папку образа
+COPY scripts/00-laravel-deploy.sh /etc/entrypoint.d/00-laravel-deploy.sh
+
+# Делаем скрипт исполняемым
+RUN chmod +x /etc/entrypoint.d/00-laravel-deploy.sh
+
+# Даем права на папки, куда Laravel будет писать
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
