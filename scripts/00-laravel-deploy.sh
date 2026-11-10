@@ -1,5 +1,5 @@
 ```bash
-#!/usr/bin/env bash
+#!/bin/sh
 
 set -Eeuo pipefail
 
